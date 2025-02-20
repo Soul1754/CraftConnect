@@ -1,10 +1,11 @@
-import { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import CustomerDashboard from "../customer/customerDashboard";
+import { AuthContext } from "../../../Context/AuthContext"; // Ensure correct path
 
 export default function Login() {
+  const { login } = useContext(AuthContext); // ✅ Fix: Get `login` function from context
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
@@ -14,25 +15,21 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted!"); // ✅ Debugging step
-
     try {
-      console.log("Sending request to backend...");
       const res = await axios.post(
         "http://localhost:5001/api/auth/login",
         formData
       );
-      console.log("Response received:", res.data); // ✅ Log response from backend
-
       localStorage.setItem("token", res.data.token);
-      const decoded = jwtDecode(res.data.token);
-      console.log("Decoded token:", decoded);
+      login(res.data.token); // ✅ Fix: Call `login` function to update auth state
 
-      if (decoded.role === "customer") navigate("/customer/Dashboard");
-      if (decoded.role === "professional") navigate("/professional/Dashboard");
-      if (decoded.role === "admin") navigate("/admin/dashboard");
+      const decoded = jwtDecode(res.data.token);
+      if (decoded.role === "customer") navigate("/customer/dashboard");
+      else if (decoded.role === "professional")
+        navigate("/professional/dashboard");
+      else if (decoded.role === "admin") navigate("/admin/dashboard");
     } catch (error) {
-      console.error("Login error:", error.response?.data || error.message); // ✅ Log error details
+      console.error("Login error:", error);
       alert("Invalid credentials");
     }
   };
@@ -59,7 +56,7 @@ export default function Login() {
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded cursor-pointer"
+          className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           Login
         </button>

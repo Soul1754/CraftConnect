@@ -15,7 +15,7 @@ export default function Signup() {
         </button>
         <button
           className="px-6 py-2 bg-green-500 text-white rounded-lg"
-          onClick={() => navigate("/signup/professional")}
+          onClick={() => navigate("/signup/professional/step1")}
         >
           Sign up as Professional
         </button>
