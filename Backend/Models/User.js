@@ -16,8 +16,9 @@ const UserSchema = new mongoose.Schema({
   location: { type: mongoose.Schema.Types.ObjectId, ref: "Location" },
   profilePicture: String,
   servicesOffered: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],
-  rating:[{type : mongoose.Schema.Types.ObjectId, ref: "Review"}],
+  rating: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   createdAt: { type: Date, default: Date.now },
+  profileCompleted:{type:Boolean,default:false},
 });
 
 module.exports = mongoose.model("User", UserSchema);
