@@ -79,7 +79,7 @@ exports.verifyOTP = async (req, res) => {
   if (
     !tempUser ||
     !otpStore[tempUser.phone] ||
-    otpStore[tempUser.phone].otp !== parseInt(otp)
+    otpStore[tempUser.phone].otp.toString() !== otp.toString()
   ) {
     return res.status(400).json({ message: "Invalid or expired OTP" });
   }

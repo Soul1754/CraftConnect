@@ -9,8 +9,16 @@ import ProfessionalSignupStep2 from "./Components/Pages/Onboarding/ProfessionalS
 import ProfessionalCompleteProfile from "./Components/Pages/Onboarding/ProfessionalCompleteProfile";
 import CustomerDashboard from "./Components/Pages/Customer/CustomerDashboard";
 import ProfessionalDashboard from "./Components/Pages/professional/professionalDashboard";
+import ProfessionalAnalytics from "./Components/Pages/professional/Analytics";
+import ProfessionalApp from "./Components/Pages/professional/App";
+import ProfessionalFeedback from "./Components/Pages/professional/Feedback";
+import ProfessionalCommunity from "./Components/Pages/professional/Community";
 import Unauthorized from "./Components/Pages/Unauthorized";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import Appointments from "./Components/Pages/Customer/Appointments";
+import Payments from "./Components/Pages/Customer/Payments";
+import History from "./Components/Pages/Customer/History";
+import Posts from "./Components/Pages/Customer/Posts";
 
 function App() {
   return (
@@ -48,10 +56,74 @@ function App() {
           }
         />
         <Route
+          path="/customer/appointments"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <Appointments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/payments"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <Payments />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/history"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <History />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/customer/posts"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <Posts />
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/professional/dashboard"
           element={
             <ProtectedRoute allowedRoles={["professional"]}>
               <ProfessionalDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/professional/analytics"
+          element={
+            <ProtectedRoute allowedRoles={["professional"]}>
+              <ProfessionalAnalytics />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/professional/app"
+          element={
+            <ProtectedRoute allowedRoles={["professional"]}>
+              <ProfessionalApp />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/professional/feedback"
+          element={
+            <ProtectedRoute allowedRoles={["professional"]}>
+              <ProfessionalFeedback />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/professional/community"
+          element={
+            <ProtectedRoute allowedRoles={["professional"]}>
+              <ProfessionalCommunity />
             </ProtectedRoute>
           }
         />
