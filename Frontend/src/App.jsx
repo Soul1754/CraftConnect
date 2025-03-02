@@ -7,10 +7,11 @@ import CustomerSignup from "./Components/Pages/Onboarding/CustomerSignup";
 import ProfessionalSignupStep1 from "./Components/Pages/Onboarding/ProfessionalSignupStep1";
 import ProfessionalSignupStep2 from "./Components/Pages/Onboarding/ProfessionalSignupStep2";
 import ProfessionalCompleteProfile from "./Components/Pages/Onboarding/ProfessionalCompleteProfile";
-import CustomerDashboard from "./Components/Pages/Customer/CustomerDashboard";
-import ProfessionalDashboard from "./Components/Pages/professional/professionalDashboard";
+import CustomerDashboard from "./Components/Pages/Dashboard/CustomerDashboard";
+import ProfessionalDashboard from "./Components/Pages/Dashboard/professionalDashboard";
 import Unauthorized from "./Components/Pages/Unauthorized";
 import ProtectedRoute from "./Components/ProtectedRoute";
+import CommunityPosts from "./Components/Pages/communityPosts/CommunityPosts";
 
 function App() {
   return (
@@ -57,6 +58,15 @@ function App() {
         />
 
         <Route path="/unauthorized" element={<Unauthorized />} />
+
+        <Route
+          path="/customer/communityPost"
+          element={
+            <ProtectedRoute allowedRoles={["customer"]}>
+              <CommunityPosts></CommunityPosts>
+            </ProtectedRoute>
+        }
+            />
       </Routes>
     </Router>
   );
