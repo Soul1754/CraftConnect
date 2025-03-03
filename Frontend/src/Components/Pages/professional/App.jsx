@@ -11,9 +11,9 @@ const App = () => {
 
   // Demo data for services
   const services = [
-    { id: 1, name: 'Basic Plumbing', price: '$50/hr', description: 'General plumbing repairs and maintenance' },
-    { id: 2, name: 'Emergency Plumbing', price: '$80/hr', description: '24/7 emergency plumbing services' },
-    { id: 3, name: 'Installation', price: '$100/hr', description: 'New fixture installation and setup' },
+    { id: 1, name: 'Basic Plumbing', price: 'Rs 50/hr', description: 'General plumbing repairs and maintenance' },
+    { id: 2, name: 'Emergency Plumbing', price: 'Rs 80/hr', description: '24/7 emergency plumbing services' },
+    { id: 3, name: 'Installation', price: 'Rs 100/hr', description: 'New fixture installation and setup' },
   ];
 
   return (
@@ -49,7 +49,7 @@ const App = () => {
                     <td className="px-6 py-4 whitespace-nowrap">{appointment.date}</td>
                     <td className="px-6 py-4 whitespace-nowrap">{appointment.time}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs rounded-full ${
+                      <span className={`px-2 py-1 text-xs rounded-full Rs {
                         appointment.status === 'Confirmed' ? 'bg-green-100 text-green-800' :
                         appointment.status === 'Pending' ? 'bg-yellow-100 text-yellow-800' :
                         'bg-gray-100 text-gray-800'
