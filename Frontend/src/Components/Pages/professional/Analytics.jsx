@@ -5,7 +5,7 @@ const Analytics = () => {
   // Demo data for analytics
   const stats = [
     { title: 'Total Bookings', value: '124', change: '+12%' },
-    { title: 'Revenue', value: '$3,240', change: '+8%' },
+    { title: 'Revenue', value: 'Rs 3,240', change: '+8%' },
     { title: 'Customer Rating', value: '4.8/5', change: '+0.2' },
     { title: 'Response Rate', value: '95%', change: '+3%' },
   ];

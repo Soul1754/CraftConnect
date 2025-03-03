@@ -103,42 +103,32 @@ exports.verifyOTP = async (req, res) => {
   }
 };
 
-
-
 exports.completeProfile = async (req, res) => {
-  const { address, servicesOffered } = req.body; // servicesOffered is expected as a comma-separated string
-  console.log(req.user);
+  const { address, latitude, longitude, servicesOffered } = req.body;
   const userId = req.user.id;
 
   try {
-    // Split the services string into an array of trimmed service names
- let serviceNames = Array.isArray(servicesOffered)
-   ? servicesOffered
-   : servicesOffered
-       .split(",")
-       .map((s) => s.trim())
-       .filter((s) => s);
+    // Create services from structured input
+    const createdServiceIds = await Promise.all(
+      servicesOffered.map(async (service) => {
+        const serviceDoc = await Service.create({
+          name: service.name,
+          type: service.type,
+          rate: service.rate,
+          description: service.description,
+          professional: userId,
+        });
+        return serviceDoc._id;
+      })
+    );
 
-    let createdServiceIds = [];
-
-    // For each service name, create a new Service document
-    for (const serviceName of serviceNames) {
-      const serviceDoc = await Service.create({
-        name: serviceName,
-        professional: userId,
-      });
-      createdServiceIds.push(serviceDoc._id);
-    }
-
-    // Update the user document:
-    // - Set the address
-    // - Push the newly created service IDs into the servicesOffered array
-    // - Mark the profile as completed
+    // Update user with address, location, and services
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       {
         address,
-        $push: { servicesOffered: { $each: createdServiceIds } },
+        location: { type: "Point", coordinates: [longitude, latitude] },
+        servicesOffered: createdServiceIds,
         profileCompleted: true,
       },
       { new: true }
@@ -149,6 +139,7 @@ exports.completeProfile = async (req, res) => {
     res.status(500).json({ message: "Server error", error });
   }
 };
+
 
 
 exports.registerCustomer = async (req, res) => {
