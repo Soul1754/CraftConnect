@@ -1,6 +1,7 @@
 // models/User.js
 const mongoose = require("mongoose");
-const { type } = require("os");
+
+
 
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -13,12 +14,27 @@ const UserSchema = new mongoose.Schema({
   },
   phone: String,
   address: String,
-  location: { type: mongoose.Schema.Types.ObjectId, ref: "Location" },
+  // Update location if you’re using GeoJSON:
+  location: {
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+    },
+    coordinates: {
+      type: [Number],
+      default: [0, 0],
+    },
+  },
   profilePicture: String,
-  servicesOffered: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],
+  // Embed the services directly instead of referencing them by ObjectId.
+  servicesOffered: [{type:mongoose.Schema.Types.ObjectId, ref: "Service"}],
   rating: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   createdAt: { type: Date, default: Date.now },
-  profileCompleted:{type:Boolean,default:false},
+  profileCompleted: { type: Boolean, default: false },
 });
 
-module.exports = mongoose.model("User", UserSchema);
+// Create a geospatial index on location if needed.
+UserSchema.index({ location: "2dsphere" });
+
+module.exports = mongoose.models.User || mongoose.model("User", UserSchema);

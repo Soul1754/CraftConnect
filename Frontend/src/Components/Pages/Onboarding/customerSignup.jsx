@@ -1,4 +1,3 @@
-// src/pages/CustomerSignup.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -11,60 +10,67 @@ export default function CustomerSignup() {
   });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      const res = await axios.post(
         "http://localhost:5001/api/auth/register-customer",
         formData
       );
-      alert("Customer registered successfully! Please log in.");
-      navigate("/login");
+      if (res.status === 201) {
+        alert("Registration successful!");
+        localStorage.setItem("token", res.data.token);
+        navigate("/customer/dashboard");
+      }
     } catch (error) {
-      console.error("Signup error", error);
-      alert("Error during registration");
+      console.error(
+        "Customer signup error:",
+        error.response?.data?.message || error.message
+      );
+      alert(error.response?.data?.message || "Error during registration.");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Customer Signup</h1>
-      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          placeholder="Full Name"
-          onChange={handleChange}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-          className="p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Register
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+      <div className="backdrop-blur-lg bg-gray-800/80 p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Customer Signup</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="name"
+            placeholder="Full Name"
+            onChange={handleChange}
+            required
+            className="w-full p-3 border rounded bg-gray-700 text-white focus:ring-2 focus:ring-purple-500"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+            className="w-full p-3 border rounded bg-gray-700 text-white focus:ring-2 focus:ring-purple-500"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+            className="w-full p-3 border rounded bg-gray-700 text-white focus:ring-2 focus:ring-purple-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white p-3 rounded hover:bg-purple-700 transition"
+          >
+            Register
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
