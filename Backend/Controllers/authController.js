@@ -52,33 +52,75 @@ exports.registerProfessional = async (req, res) => {
 exports.sendOTP = async (req, res) => {
   const { email, phone } = req.body;
   try {
-    if (!tempUsers[email])
+    if (!tempUsers[email]) {
       return res
         .status(400)
         .json({ message: "Please register first using your email" });
-    // If an OTP is already sent and not expired, prevent resending.
-    if (otpStore[phone] && otpStore[phone].expires > Date.now()) {
-      return res
-        .status(400)
-        .json({
-          message: "OTP already sent. Please wait before requesting a new one.",
-        });
     }
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    otpStore[phone] = { otp, expires: Date.now() + 300000 }; // Valid for 5 minutes
-    await client.messages.create({
-      body: `Your OTP for CraftConnect is: ${otp}`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: phone,
+
+    // If OTP doesn't exist or has expired, generate a new one
+    if (!otpStore[phone] || otpStore[phone].expires < Date.now()) {
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      otpStore[phone] = { otp, expires: Date.now() + 300000, lastSent: Date.now() }; // Expires in 5 mins
+
+      await client.messages.create({
+        body: `Your OTP for CraftConnect is: ${otp}`,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: phone,
+      });
+
+      tempUsers[email].phone = phone;
+      return res.status(200).json({ message: "OTP sent successfully" });
+    }
+
+    return res.status(400).json({
+      message: "OTP already sent. Please wait before requesting a new one.",
     });
-    // Store the phone number in the temporary user info.
-    tempUsers[email].phone = phone;
-    return res.status(200).json({ message: "OTP sent successfully" });
+
   } catch (error) {
     console.error("Error sending OTP:", error);
     return res.status(500).json({ message: "Error sending OTP" });
   }
 };
+
+exports.resendOTP = async (req, res) => {
+  const { phone } = req.body;
+
+  if (!otpStore[phone]) {
+    return res
+      .status(400)
+      .json({
+        message: "No OTP sent previously. Please request a new OTP first.",
+      });
+  }
+
+  const cooldownTime = 15000; // 60 seconds cooldown
+  if (
+    otpStore[phone].lastSent &&
+    otpStore[phone].lastSent + cooldownTime > Date.now()
+  ) {
+    const remainingTime = Math.ceil(
+      (otpStore[phone].lastSent + cooldownTime - Date.now()) / 1000
+    );
+    return res
+      .status(400)
+      .json({
+        message: `Please wait ${remainingTime} seconds before resending OTP.`,
+      });
+  }
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString();
+  otpStore[phone] = { otp, expires: Date.now() + 300000, lastSent: Date.now() };
+
+  await client.messages.create({
+    body: `Your OTP for CraftConnect is: ${otp}`,
+    from: process.env.TWILIO_PHONE_NUMBER,
+    to: phone,
+  });
+
+  return res.status(200).json({ message: "OTP resent successfully" });
+};
+
 
 // STEP 3: Verify OTP and create the professional user
 exports.verifyOTP = async (req, res) => {
