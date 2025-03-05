@@ -1,8 +1,15 @@
+// routes/authRoutes.js
 const express = require("express");
 const router = express.Router();
 const { protect } = require("../Middlewares/authMiddleware");
-const {  sendOTP,verifyOTP,registerProfessional,completeProfile,registerCustomer,login } = require("../Controllers/authController");
-
+const {
+  registerProfessional,
+  sendOTP,
+  verifyOTP,
+  completeProfile,
+  registerCustomer,
+  login,
+} = require("../Controllers/authController");
 
 router.post("/register-professional", registerProfessional);
 router.post("/send-otp", sendOTP);

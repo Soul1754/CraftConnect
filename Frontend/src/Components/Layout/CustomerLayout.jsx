@@ -7,7 +7,7 @@ export default function CustomerLayout({ children }) {
   const handleLogout = () => {
     // Clear authentication
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/');
   };
 
   return (

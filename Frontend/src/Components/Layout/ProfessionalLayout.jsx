@@ -6,7 +6,7 @@ export default function ProfessionalLayout({ children }) {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/');
   };
 
   return (

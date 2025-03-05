@@ -1,17 +1,13 @@
-import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { AuthContext } from "../../../Context/AuthContext"; // Ensure correct path
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
-  const { login } = useContext(AuthContext); // ✅ Fix: Get `login` function from context
   const [formData, setFormData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,47 +16,59 @@ export default function Login() {
         "http://localhost:5001/api/auth/login",
         formData
       );
-      localStorage.setItem("token", res.data.token);
-      login(res.data.token); // ✅ Fix: Call `login` function to update auth state
-
-      const decoded = jwtDecode(res.data.token);
-      if (decoded.role === "customer") navigate("/customer/dashboard");
-      else if (decoded.role === "professional")
-        navigate("/professional/dashboard");
-      else if (decoded.role === "admin") navigate("/admin/dashboard");
+      if (res.status === 200) {
+        alert("Login successful!");
+        localStorage.setItem("token", res.data.token);
+        if (res.data.user.role === "customer") {
+          navigate("/customer/dashboard");
+        } else if (res.data.user.role === "professional") {
+          navigate("/professional/dashboard");
+        }
+      }
     } catch (error) {
-      console.error("Login error:", error);
-      alert("Invalid credentials");
+      console.error(
+        "Login error:",
+        error.response?.data?.message || error.message
+      );
+      alert(error.response?.data?.message || "Login failed.");
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Login</h1>
-      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-          className="p-2 border rounded"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-          className="p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Login
-        </button>
-      </form>
+    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
+      <div className="backdrop-blur-lg bg-gray-800/80 p-8 rounded-2xl shadow-lg w-full max-w-md">
+        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="email"
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+            className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+            className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <button
+            type="submit"
+            className="w-full bg-purple-600 text-white p-3 rounded-lg shadow-md hover:bg-purple-700 transition"
+          >
+            Login
+          </button>
+        </form>
+        <p className="text-center mt-4">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-blue-400 hover:underline">
+            Sign up
+          </Link>
+        </p>
+      </div>
     </div>
   );
 }
