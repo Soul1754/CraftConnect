@@ -1,24 +1,24 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LandingPage from "./Components/Pages/LandingPage.jsx";
-import Login from "./Components/Pages/Onboarding/Login";
-import Signup from "./Components/Pages/Onboarding/Signup";
-import CustomerSignup from "./Components/Pages/Onboarding/CustomerSignup";
-import ProfessionalSignupStep1 from "./Components/Pages/Onboarding/ProfessionalSignupStep1";
-import ProfessionalSignupStep2 from "./Components/Pages/Onboarding/ProfessionalSignupStep2";
-import ProfessionalCompleteProfile from "./Components/Pages/Onboarding/ProfessionalCompleteProfile";
-import CustomerDashboard from "./Components/Pages/Customer/CustomerDashboard";
-import ProfessionalDashboard from "./Components/Pages/professional/professionalDashboard";
-import ProfessionalAnalytics from "./Components/Pages/professional/Analytics";
-import ProfessionalApp from "./Components/Pages/professional/App";
-import ProfessionalFeedback from "./Components/Pages/professional/Feedback";
-import ProfessionalCommunity from "./Components/Pages/professional/Community";
-import Unauthorized from "./Components/Pages/Unauthorized";
-import ProtectedRoute from "./Components/ProtectedRoute";
-import Appointments from "./Components/Pages/Customer/Appointments";
-import Payments from "./Components/Pages/Customer/Payments";
-import History from "./Components/Pages/Customer/History";
-import Posts from "./Components/Pages/Customer/Posts";
+import Login from "./Components/Pages/Onboarding/login.jsx";
+import Signup from "./Components/Pages/Onboarding/signup.jsx";
+import CustomerSignup from "./Components/Pages/Onboarding/customerSignup.jsx";
+import ProfessionalSignupStep1 from "./Components/Pages/Onboarding/ProfessionalSignupStep1.jsx";
+import ProfessionalSignupStep2 from "./Components/Pages/Onboarding/ProfessionalSignupStep2.jsx";
+import ProfessionalCompleteProfile from "./Components/Pages/Onboarding/ProfessionalCompleteProfile.jsx";
+import CustomerDashboard from "./Components/Pages/Customer/CustomerDashboard.jsx";
+import ProfessionalDashboard from "./Components/Pages/professional/professionalDashboard.jsx";
+import ProfessionalAnalytics from "./Components/Pages/professional/Analytics.jsx";
+import ProfessionalApp from "./Components/Pages/professional/App.jsx";
+import ProfessionalFeedback from "./Components/Pages/professional/Feedback.jsx";
+import ProfessionalCommunity from "./Components/Pages/professional/Community.jsx";
+import Unauthorized from "./Components/Pages/Unauthorized.jsx";
+import ProtectedRoute from "./Components/ProtectedRoute.jsx";
+import Appointments from "./Components/Pages/Customer/Appointments.jsx";
+import Payments from "./Components/Pages/Customer/Payments.jsx";
+import History from "./Components/Pages/Customer/History.jsx";
+import Posts from "./Components/Pages/Customer/Posts.jsx";
 
 function App() {
   return (
