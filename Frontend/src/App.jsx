@@ -1,6 +1,6 @@
 // src/App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LandingPage from "./components/pages/LandingPage";
+import LandingPage from "./Components/pages/LandingPage";
 import Login from "./Components/Pages/Onboarding/Login";
 import Signup from "./Components/Pages/Onboarding/Signup";
 import CustomerSignup from "./Components/Pages/Onboarding/CustomerSignup";
