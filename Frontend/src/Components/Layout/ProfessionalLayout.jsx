@@ -27,7 +27,7 @@ export default function ProfessionalLayout({ children }) {
             to="/professional/app"
             className="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
           >
-            App
+            Appointments
           </Link>
           <Link
             to="/professional/feedback"

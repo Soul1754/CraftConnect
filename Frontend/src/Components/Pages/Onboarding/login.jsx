@@ -35,36 +35,45 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">
-      <div className="backdrop-blur-lg bg-gray-800/80 p-8 rounded-2xl shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-            required
-            className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            required
-            className="w-full p-3 bg-gray-700 text-white border border-gray-600 rounded focus:outline-none focus:ring-2 focus:ring-purple-500"
-          />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md border border-slate-100">
+        <h2 className="text-3xl font-bold mb-8 text-center text-slate-800">
+          Welcome Back
+          <span className="block text-sm font-normal text-slate-500 mt-1">Sign in to your account</span>
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700">Email</label>
+            <input
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+            />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium text-slate-700">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              onChange={handleChange}
+              required
+              className="w-full p-3 border border-slate-200 rounded-lg bg-white text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+            />
+          </div>
           <button
             type="submit"
-            className="w-full bg-purple-600 text-white p-3 rounded-lg shadow-md hover:bg-purple-700 transition"
+            className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition duration-200 hover:scale-[1.02]"
           >
-            Login
+            Sign In
           </button>
         </form>
-        <p className="text-center mt-4">
-          Don't have an account?{" "}
-          <Link to="/signup" className="text-blue-400 hover:underline">
+        <p className="text-center mt-6 text-slate-600">
+          Don&apos;t have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:text-blue-700 font-medium">
             Sign up
           </Link>
         </p>
