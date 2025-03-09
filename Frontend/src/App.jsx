@@ -7,7 +7,7 @@ import CustomerSignup from "./Components/Pages/Onboarding/customerSignup.jsx";
 import ProfessionalSignupStep1 from "./Components/Pages/Onboarding/ProfessionalSignupStep1.jsx";
 import ProfessionalSignupStep2 from "./Components/Pages/Onboarding/ProfessionalSignupStep2.jsx";
 import ProfessionalCompleteProfile from "./Components/Pages/Onboarding/ProfessionalCompleteProfile.jsx";
-import CustomerDashboard from "./Components/Pages/customer/CustomerDashboard.jsx";
+import CustomerDashboard from "./Components/Pages/customer/customerDashboard.jsx";
 import ProfessionalDashboard from "./Components/Pages/professional/professionalDashboard.jsx";
 import ProfessionalAnalytics from "./Components/Pages/professional/Analytics.jsx";
 import ProfessionalApp from "./Components/Pages/professional/App.jsx";
