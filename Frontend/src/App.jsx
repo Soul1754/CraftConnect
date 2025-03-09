@@ -14,7 +14,7 @@ import ProfessionalApp from "./Components/Pages/professional/App.jsx";
 import ProfessionalFeedback from "./Components/Pages/professional/Feedback.jsx";
 import ProfessionalCommunity from "./Components/Pages/professional/Community.jsx";
 import Unauthorized from "./Components/Pages/Unauthorized.jsx";
-import ProtectedRoute from "./Components/ProtectedRoute.jsx";
+import ProtectedRoute from "./Components/protectedRoute.jsx";
 import Appointments from "./Components/Pages/customer/Appointments.jsx";
 import Payments from "./Components/Pages/customer/Payments.jsx";
 import History from "./Components/Pages/customer/History.jsx";
