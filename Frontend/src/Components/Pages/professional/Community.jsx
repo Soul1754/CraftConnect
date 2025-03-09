@@ -1,96 +1,374 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ProfessionalLayout from '../../Layout/ProfessionalLayout';
 
 const Community = () => {
-  // Demo data for community posts
-  const posts = [
-    {
-      id: 1,
-      author: 'Jane Smith',
-      role: 'Master Electrician',
-      title: 'Tips for Managing Multiple Projects',
-      content: 'Here are some strategies I use to handle multiple clients effectively...',
-      likes: 24,
-      comments: 8,
-      time: '2 hours ago'
-    },
-    {
-      id: 2,
-      author: 'Mike Brown',
-      role: 'Plumbing Expert',
-      title: 'New Regulations Update',
-      content: 'Important updates regarding local plumbing codes and regulations...',
-      likes: 15,
-      comments: 5,
-      time: '4 hours ago'
-    },
-    {
-      id: 3,
-      author: 'Sarah Wilson',
-      role: 'Interior Designer',
-      title: 'Collaboration Opportunity',
-      content: 'Looking for skilled craftsmen for an upcoming renovation project...',
-      likes: 32,
-      comments: 12,
-      time: '1 day ago'
-    }
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [locationPermission, setLocationPermission] = useState(false);
+  const [userLocation, setUserLocation] = useState(null);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [showQuotationForm, setShowQuotationForm] = useState(false);
+  const [tagFilter, setTagFilter] = useState('');
+  const [maxDistance, setMaxDistance] = useState(10000); // 10km default
+  
+  // Quotation form state
+  const [quotationData, setQuotationData] = useState({
+    content: '',
+    amount: '',
+    estimatedTime: '',
+    additionalNotes: ''
+  });
+
+  // Available service tags for filtering
+  const availableTags = [
+    'All', 'Plumbing', 'Electrical', 'Carpentry', 'Painting', 
+    'Cleaning', 'Landscaping', 'HVAC', 'Roofing'
   ];
+
+  // Request location permission on component mount
+  useEffect(() => {
+    requestLocationPermission();
+  }, []);
+
+  // Fetch posts when location or filters change
+  useEffect(() => {
+    if (locationPermission && userLocation) {
+      fetchNearbyPosts();
+    }
+  }, [locationPermission, userLocation, tagFilter, maxDistance]);
+
+  // Request location permission
+  const requestLocationPermission = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setLocationPermission(true);
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
+        },
+        (error) => {
+          console.error('Error getting location:', error);
+          setError('Location permission is required to view nearby posts. Please enable location services.');
+        }
+      );
+    } else {
+      setError('Geolocation is not supported by this browser.');
+    }
+  };
+
+  // Fetch nearby posts from API
+  const fetchNearbyPosts = async () => {
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('You must be logged in to view nearby posts');
+        setLoading(false);
+        return;
+      }
+      
+      // Build query parameters
+      let queryParams = `longitude=${userLocation.longitude}&latitude=${userLocation.latitude}&maxDistance=${maxDistance}`;
+      if (tagFilter && tagFilter !== 'All') {
+        queryParams += `&tags=${tagFilter}`;
+      }
+      
+      const response = await axios.get(`http://localhost:5001/api/community/nearby-posts?${queryParams}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      setPosts(response.data);
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching nearby posts:', err);
+      setError('Failed to load nearby posts. Please try again later.');
+      setLoading(false);
+    }
+  };
+
+  // Handle quotation form input changes
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setQuotationData({ ...quotationData, [name]: value });
+  };
+
+  // Submit quotation
+  const handleSubmitQuotation = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        setError('You must be logged in to submit a quotation');
+        return;
+      }
+      
+      const quotationPayload = {
+        postId: selectedPost._id,
+        ...quotationData
+      };
+      
+      await axios.post('http://localhost:5001/api/community/submit-quotation', quotationPayload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Reset form and state
+      setQuotationData({
+        content: '',
+        amount: '',
+        estimatedTime: '',
+        additionalNotes: ''
+      });
+      setShowQuotationForm(false);
+      setSelectedPost(null);
+      
+      // Refresh posts
+      fetchNearbyPosts();
+    } catch (err) {
+      console.error('Error submitting quotation:', err);
+      setError(err.response?.data?.message || 'Failed to submit quotation. Please try again.');
+    }
+  };
+
+  // Format distance in a readable way
+  const formatDistance = (meters) => {
+    if (meters < 1000) {
+      return `${meters.toFixed(0)} m`;
+    } else {
+      return `${(meters / 1000).toFixed(1)} km`;
+    }
+  };
 
   return (
     <ProfessionalLayout>
       <div className="space-y-6">
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+            {error}
+            <button 
+              className="float-right" 
+              onClick={() => setError(null)}
+            >
+              &times;
+            </button>
+          </div>
+        )}
+        
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-800">Professional Community</h1>
-          <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
-            Create Post
-          </button>
+          <h1 className="text-2xl font-bold text-gray-800">Nearby Service Requests</h1>
+          {!locationPermission && (
+            <button 
+              className="bg-yellow-500 text-white px-4 py-2 rounded-lg hover:bg-yellow-600"
+              onClick={requestLocationPermission}
+            >
+              Grant Location Permission
+            </button>
+          )}
         </div>
 
-        {/* Community Feed */}
-        <div className="space-y-4">
-          {posts.map((post) => (
-            <div key={post.id} className="bg-white p-6 rounded-lg shadow-sm">
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
-                  <div className="flex items-center mt-1 space-x-2">
-                    <span className="text-sm font-medium text-gray-900">{post.author}</span>
-                    <span className="text-sm text-gray-500">• {post.role}</span>
-                    <span className="text-sm text-gray-500">• {post.time}</span>
+        {/* Filters */}
+        {locationPermission && (
+          <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="flex flex-wrap gap-4 items-center">
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Service Type</label>
+                <select 
+                  className="p-2 border rounded-lg"
+                  value={tagFilter}
+                  onChange={(e) => setTagFilter(e.target.value)}
+                >
+                  {availableTags.map(tag => (
+                    <option key={tag} value={tag}>{tag}</option>
+                  ))}
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm text-gray-600 mb-1">Max Distance</label>
+                <select 
+                  className="p-2 border rounded-lg"
+                  value={maxDistance}
+                  onChange={(e) => setMaxDistance(parseInt(e.target.value))}
+                >
+                  <option value="1000">1 km</option>
+                  <option value="5000">5 km</option>
+                  <option value="10000">10 km</option>
+                  <option value="25000">25 km</option>
+                  <option value="50000">50 km</option>
+                </select>
+              </div>
+              
+              <button 
+                className="mt-5 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                onClick={fetchNearbyPosts}
+              >
+                Refresh
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Selected Post Detail with Quotation Form */}
+        {selectedPost && (
+          <div className="bg-white p-6 rounded-lg shadow-sm border-2 border-blue-200">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h2 className="text-xl font-semibold text-gray-900">{selectedPost.title}</h2>
+                <div className="flex items-center mt-1 space-x-2">
+                  <span className="text-sm font-medium text-gray-900">{selectedPost.user?.name || 'Customer'}</span>
+                  <span className="text-sm text-gray-500">• {new Date(selectedPost.createdAt).toLocaleDateString()}</span>
+                </div>
+              </div>
+              <button 
+                className="text-gray-400 hover:text-gray-500"
+                onClick={() => {
+                  setSelectedPost(null);
+                  setShowQuotationForm(false);
+                }}
+              >
+                <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
+            
+            <p className="text-gray-600 mb-4">{selectedPost.content}</p>
+            
+            <div className="flex flex-wrap gap-2 mb-4">
+              {selectedPost.tags && selectedPost.tags.map(tag => (
+                <span key={tag} className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            
+            <button
+              className={`w-full py-2 rounded-lg ${showQuotationForm ? 'bg-gray-300 text-gray-700' : 'bg-blue-500 text-white hover:bg-blue-600'}`}
+              onClick={() => setShowQuotationForm(!showQuotationForm)}
+            >
+              {showQuotationForm ? 'Cancel Quotation' : 'Submit Quotation'}
+            </button>
+            
+            {showQuotationForm && (
+              <form onSubmit={handleSubmitQuotation} className="mt-4 border-t pt-4">
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Your Message</label>
+                  <textarea
+                    name="content"
+                    value={quotationData.content}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-lg"
+                    rows="3"
+                    placeholder="Describe how you can help with this request..."
+                    required
+                  ></textarea>
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Price Quote ($)</label>
+                  <input
+                    type="number"
+                    name="amount"
+                    value={quotationData.amount}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-lg"
+                    placeholder="Enter your price"
+                    required
+                  />
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Estimated Time</label>
+                  <input
+                    type="text"
+                    name="estimatedTime"
+                    value={quotationData.estimatedTime}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-lg"
+                    placeholder="e.g. 2 hours, 3 days"
+                    required
+                  />
+                </div>
+                
+                <div className="mb-4">
+                  <label className="block text-gray-700 mb-2">Additional Notes (Optional)</label>
+                  <textarea
+                    name="additionalNotes"
+                    value={quotationData.additionalNotes}
+                    onChange={handleInputChange}
+                    className="w-full p-2 border rounded-lg"
+                    rows="2"
+                    placeholder="Any additional information..."
+                  ></textarea>
+                </div>
+                
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-lg bg-green-500 text-white hover:bg-green-600"
+                >
+                  Submit Quotation
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+
+        {/* Posts List */}
+        {loading ? (
+          <div className="text-center py-4">Loading nearby posts...</div>
+        ) : !locationPermission ? (
+          <div className="text-center py-4 text-gray-500">
+            Please grant location permission to view nearby service requests.
+          </div>
+        ) : posts.length === 0 ? (
+          <div className="text-center py-4 text-gray-500">
+            No service requests found in your area. Try increasing the distance or changing filters.
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {posts.map((post) => (
+              <div key={post._id} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h2 className="text-xl font-semibold text-gray-900">{post.title}</h2>
+                    <div className="flex items-center mt-1 space-x-2">
+                      <span className="text-sm font-medium text-gray-900">{post.user?.name || 'Customer'}</span>
+                      <span className="text-sm text-gray-500">• {new Date(post.createdAt).toLocaleDateString()}</span>
+                      {post.location && userLocation && (
+                        <span className="text-sm text-gray-500">• {formatDistance(post.distance || 0)} away</span>
+                      )}
+                    </div>
                   </div>
                 </div>
-                <button className="text-gray-400 hover:text-gray-500">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
-                  </svg>
+                
+                <p className="text-gray-600 mb-4">
+                  {post.content.length > 150 ? `${post.content.substring(0, 150)}...` : post.content}
+                </p>
+                
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {post.tags && post.tags.map(tag => (
+                    <span key={tag} className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                
+                <button
+                  onClick={() => setSelectedPost(post)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                >
+                  View Details
                 </button>
               </div>
-              
-              <p className="text-gray-600 mb-4">{post.content}</p>
-              
-              <div className="flex items-center space-x-4 text-sm">
-                <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                  </svg>
-                  <span>{post.likes} Likes</span>
-                </button>
-                <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clipRule="evenodd" />
-                  </svg>
-                  <span>{post.comments} Comments</span>
-                </button>
-                <button className="flex items-center space-x-1 text-gray-500 hover:text-blue-500">
-                  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M15 8a3 3 0 10-2.977-2.63l-4.94 2.47a3 3 0 100 4.319l4.94 2.47a3 3 0 10.895-1.789l-4.94-2.47a3.027 3.027 0 000-.74l4.94-2.47C13.456 7.68 14.19 8 15 8z" />
-                  </svg>
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </div>
     </ProfessionalLayout>
   );

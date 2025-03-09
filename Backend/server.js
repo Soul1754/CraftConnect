@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
 const authRoutes = require("./Routes/authRoutes");
+const communityRoutes = require("./Routes/communityRoutes");
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // API Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/community", communityRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
