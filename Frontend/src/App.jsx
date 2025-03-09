@@ -7,7 +7,7 @@ import CustomerSignup from "./Components/Pages/Onboarding/customerSignup.jsx";
 import ProfessionalSignupStep1 from "./Components/Pages/Onboarding/ProfessionalSignupStep1.jsx";
 import ProfessionalSignupStep2 from "./Components/Pages/Onboarding/ProfessionalSignupStep2.jsx";
 import ProfessionalCompleteProfile from "./Components/Pages/Onboarding/ProfessionalCompleteProfile.jsx";
-import CustomerDashboard from "./Components/Pages/Customer/CustomerDashboard.jsx";
+import CustomerDashboard from "./Components/Pages/customer/CustomerDashboard.jsx";
 import ProfessionalDashboard from "./Components/Pages/professional/professionalDashboard.jsx";
 import ProfessionalAnalytics from "./Components/Pages/professional/Analytics.jsx";
 import ProfessionalApp from "./Components/Pages/professional/App.jsx";
@@ -15,10 +15,10 @@ import ProfessionalFeedback from "./Components/Pages/professional/Feedback.jsx";
 import ProfessionalCommunity from "./Components/Pages/professional/Community.jsx";
 import Unauthorized from "./Components/Pages/Unauthorized.jsx";
 import ProtectedRoute from "./Components/ProtectedRoute.jsx";
-import Appointments from "./Components/Pages/Customer/Appointments.jsx";
-import Payments from "./Components/Pages/Customer/Payments.jsx";
-import History from "./Components/Pages/Customer/History.jsx";
-import Posts from "./Components/Pages/Customer/Posts.jsx";
+import Appointments from "./Components/Pages/customer/Appointments.jsx";
+import Payments from "./Components/Pages/customer/Payments.jsx";
+import History from "./Components/Pages/customer/History.jsx";
+import Posts from "./Components/Pages/customer/Posts.jsx";
 
 function App() {
   return (
