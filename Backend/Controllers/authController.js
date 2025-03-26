@@ -178,10 +178,9 @@ exports.completeProfile = async (req, res) => {
         .json({ message: "Invalid or missing location coordinates" });
     }
 
-    // Create each service and collect its id.
+  
     const serviceIds = await Promise.all(
       servicesOffered.map(async (service) => {
-        // Check that required fields are present.
         if (
           !service.name ||
           !service.type ||
@@ -192,11 +191,11 @@ exports.completeProfile = async (req, res) => {
             "Service name, type, rate, and description are required."
           );
         }
-        // Map the frontend's "rate" to the schema's "price"
+        
         const newService = await Service.create({
           name: service.name,
           type: service.type,
-          price: service.rate, // mapping "rate" to "price"
+          price: service.rate, 
           description: service.description,
           professional: userId,
           category: service.category || undefined,
