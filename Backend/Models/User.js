@@ -1,8 +1,6 @@
 // models/User.js
 const mongoose = require("mongoose");
 
-
-
 const UserSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
@@ -26,12 +24,20 @@ const UserSchema = new mongoose.Schema({
       default: [0, 0],
     },
   },
+
   profilePicture: String,
   // Embed the services directly instead of referencing them by ObjectId.
-  servicesOffered: [{type:mongoose.Schema.Types.ObjectId, ref: "Service"}],
+  servicesOffered: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],
   rating: [{ type: mongoose.Schema.Types.ObjectId, ref: "Review" }],
   createdAt: { type: Date, default: Date.now },
   profileCompleted: { type: Boolean, default: false },
+  bankDetails: {
+    accountHolderName: { type: String },
+    accountNumber: { type: String },
+    bankName: { type: String },
+    ifscCode: { type: String },
+  },
+  bankDetailsVerified: { type: Boolean, default: false },
 });
 
 // Create a geospatial index on location if needed.
