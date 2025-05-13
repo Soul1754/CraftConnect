@@ -1,8 +1,8 @@
 // authController.js
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
-const Service = require("../models/Service");
+const User = require("../Models/User");
+const Service = require("../Models/Service");
 const dotenv = require("dotenv");
 const twilio = require("twilio");
 
@@ -24,6 +24,55 @@ const generateToken = (id, role) =>
 // ==============================
 // Professional Endpoints
 // ==============================
+
+// Get bank details
+exports.getBankDetails = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ bankDetails: user.bankDetails });
+  } catch (error) {
+    console.error("Error fetching bank details:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Update bank details
+exports.saveBankDetails = async (req, res) => {
+  try {
+    const { accountHolderName, accountNumber, bankName, ifscCode } = req.body;
+
+    // Validate required fields
+    if (!accountHolderName || !accountNumber || !bankName || !ifscCode) {
+      return res.status(400).json({ message: "All bank details are required" });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update bank details
+    user.bankDetails = {
+      accountHolderName,
+      accountNumber,
+      bankName,
+      ifscCode,
+    };
+    user.bankDetailsVerified = false; // Will be verified through Razorpay later
+
+    await user.save();
+    res.json({
+      message: "Bank details updated successfully",
+      bankDetails: user.bankDetails,
+    });
+  } catch (error) {
+    console.error("Error updating bank details:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
 // STEP 1: Register email & password (temporary storage)
 exports.registerProfessional = async (req, res) => {
@@ -61,7 +110,11 @@ exports.sendOTP = async (req, res) => {
     // If OTP doesn't exist or has expired, generate a new one
     if (!otpStore[phone] || otpStore[phone].expires < Date.now()) {
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      otpStore[phone] = { otp, expires: Date.now() + 300000, lastSent: Date.now() }; // Expires in 5 mins
+      otpStore[phone] = {
+        otp,
+        expires: Date.now() + 300000,
+        lastSent: Date.now(),
+      }; // Expires in 5 mins
 
       await client.messages.create({
         body: `Your OTP for CraftConnect is: ${otp}`,
@@ -76,7 +129,6 @@ exports.sendOTP = async (req, res) => {
     return res.status(400).json({
       message: "OTP already sent. Please wait before requesting a new one.",
     });
-
   } catch (error) {
     console.error("Error sending OTP:", error);
     return res.status(500).json({ message: "Error sending OTP" });
@@ -87,11 +139,9 @@ exports.resendOTP = async (req, res) => {
   const { phone } = req.body;
 
   if (!otpStore[phone]) {
-    return res
-      .status(400)
-      .json({
-        message: "No OTP sent previously. Please request a new OTP first.",
-      });
+    return res.status(400).json({
+      message: "No OTP sent previously. Please request a new OTP first.",
+    });
   }
 
   const cooldownTime = 15000; // 60 seconds cooldown
@@ -102,11 +152,9 @@ exports.resendOTP = async (req, res) => {
     const remainingTime = Math.ceil(
       (otpStore[phone].lastSent + cooldownTime - Date.now()) / 1000
     );
-    return res
-      .status(400)
-      .json({
-        message: `Please wait ${remainingTime} seconds before resending OTP.`,
-      });
+    return res.status(400).json({
+      message: `Please wait ${remainingTime} seconds before resending OTP.`,
+    });
   }
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -120,7 +168,6 @@ exports.resendOTP = async (req, res) => {
 
   return res.status(200).json({ message: "OTP resent successfully" });
 };
-
 
 // STEP 3: Verify OTP and create the professional user
 exports.verifyOTP = async (req, res) => {
@@ -152,6 +199,13 @@ exports.verifyOTP = async (req, res) => {
       phone: tempUser.phone,
       role: "professional",
       profileCompleted: false,
+      bankDetails: {
+        accountNumber: "",
+        bankName: "",
+        ifscCode: "",
+        accountHolderName: "",
+      },
+      bankDetailsVerified: false,
     });
     // Clear temporary data.
     delete tempUsers[email];
@@ -229,8 +283,6 @@ exports.completeProfile = async (req, res) => {
   }
 };
 
-
-
 // ==============================
 // Customer Endpoints
 // ==============================
@@ -258,6 +310,42 @@ exports.registerCustomer = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Server error during customer registration" });
+  }
+};
+
+// Save bank details for professionals
+exports.saveBankDetails = async (req, res) => {
+  try {
+    const { accountHolderName, accountNumber, bankName, ifscCode } = req.body;
+    const userId = req.user.id;
+
+    // Validate input
+    if (!accountHolderName || !accountNumber || !bankName || !ifscCode) {
+      return res.status(400).json({ message: "All bank details are required" });
+    }
+
+    // Update user with bank details
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        bankDetails: {
+          accountHolderName,
+          accountNumber,
+          bankName,
+          ifscCode,
+        },
+        bankDetailsVerified: false, // Will be verified later through Razorpay
+      },
+      { new: true }
+    );
+
+    res.json({
+      message: "Bank details saved successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error saving bank details:", error);
+    res.status(500).json({ message: "Server error while saving bank details" });
   }
 };
 

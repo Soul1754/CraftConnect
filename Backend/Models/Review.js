@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 // models/Review.js
 const ReviewSchema = new mongoose.Schema({
   customer: {

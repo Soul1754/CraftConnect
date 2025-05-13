@@ -9,8 +9,14 @@ const {
   completeProfile,
   registerCustomer,
   login,
-  resendOTP
+  resendOTP,
+  saveBankDetails,
+  getBankDetails,
 } = require("../Controllers/authController");
+
+// Bank Details Routes
+router.get("/bank-details", protect, getBankDetails);
+router.put("/bank-details", protect, saveBankDetails);
 
 router.post("/register-professional", registerProfessional);
 router.post("/send-otp", sendOTP);
@@ -19,6 +25,5 @@ router.post("/verify-otp", verifyOTP);
 router.post("/complete-profile", protect, completeProfile);
 router.post("/register-customer", registerCustomer);
 router.post("/login", login);
-
 
 module.exports = router;

@@ -13,7 +13,7 @@ export default function ProfessionalLayout({ children }) {
   const navItems = [
     { path: "/professional/dashboard", label: "Dashboard" },
     { path: "/professional/analytics", label: "Analytics" },
-    { path: "/professional/app", label: "App" },
+    { path: "/professional/appointment", label: "Appointments" },
     { path: "/professional/feedback", label: "Feedback" },
     { path: "/professional/community", label: "Community" },
   ];

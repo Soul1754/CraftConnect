@@ -7,7 +7,8 @@ const {
   submitQuotation,
   getUserPosts,
   acceptQuotation,
-  markPostCompleted
+  markPostCompleted,
+  getQuotationById,
 } = require("../Controllers/communityController");
 
 // Customer routes
@@ -19,5 +20,6 @@ router.post("/complete-post", protect, markPostCompleted);
 // Professional routes
 router.get("/nearby-posts", protect, getNearbyPosts);
 router.post("/submit-quotation", protect, submitQuotation);
+router.get("/quotation/:replyId", protect, getQuotationById);
 
 module.exports = router;

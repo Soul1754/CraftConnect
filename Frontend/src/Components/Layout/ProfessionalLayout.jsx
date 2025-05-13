@@ -24,7 +24,7 @@ export default function ProfessionalLayout({ children }) {
             Analytics
           </Link>
           <Link
-            to="/professional/app"
+            to="/professional/appointment"
             className="block px-4 py-2 text-gray-600 hover:bg-gray-100 hover:text-gray-800"
           >
             Appointments
