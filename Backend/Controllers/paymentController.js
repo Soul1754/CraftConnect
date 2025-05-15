@@ -197,7 +197,7 @@ exports.initiatePayout = async (req, res) => {
     };
 
     // Update booking with payout details
-    booking.payoutStatus = "released";
+    booking.payoutStatus = "complete";
     booking.payoutId = payout.id;
     await booking.save();
 
