@@ -4,10 +4,6 @@ import { getCustomerReviews } from '../../../Services/ReviewService';
 
 const History = () => {
     const [activities] = useState([
-        { id: 1, type: 'Appointment', description: 'Plumbing service with John Doe', date: '2024-02-20', rating: 5 },
-        { id: 2, type: 'Payment', description: 'Paid for electrical work', date: '2024-02-18', rating: 4 },
-        { id: 3, type: 'Post', description: 'Posted a request for carpentry work', date: '2024-02-15', rating: null },
-        { id: 4, type: 'Review', description: 'Left a review for Jane Smith', date: '2024-02-10', rating: 5 }
     ]);
     
     const [reviews, setReviews] = useState([]);

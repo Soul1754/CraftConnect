@@ -13,9 +13,20 @@ dotenv.config();
 
 const app = express();
 
+app.use(cors({
+  origin:[
+    'https://craft-connect-frontend-orcin.vercel.app',
+    'http://localhost:5173',
+    'https://craft-connect-kappa.vercel.app'
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
 // Middleware
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 
 // Connect to MongoDB
 mongoose
