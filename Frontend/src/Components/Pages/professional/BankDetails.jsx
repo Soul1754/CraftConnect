@@ -26,7 +26,7 @@ const BankDetails = () => {
         }
 
         const response = await axios.get(
-          "http://localhost:5001/api/auth/bank-details",
+          "https://craftconnect-1-cb4x.onrender.com/api/auth/bank-details",
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -69,7 +69,7 @@ const BankDetails = () => {
         return;
       }
 
-      await axios.put("http://localhost:5001/api/auth/bank-details", bankData, {
+      await axios.put("https://craftconnect-1-cb4x.onrender.com/api/auth/bank-details", bankData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

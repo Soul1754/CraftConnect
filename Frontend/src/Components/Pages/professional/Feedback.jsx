@@ -25,7 +25,7 @@ const Feedback = () => {
         throw new Error('Authentication required');
       }
 
-      const response = await axios.get('http://localhost:5001/api/reviews/professional', {
+      const response = await axios.get('https://craftconnect-1-cb4x.onrender.com/api/reviews/professional', {
         headers: {
           Authorization: `Bearer ${token}`
         }

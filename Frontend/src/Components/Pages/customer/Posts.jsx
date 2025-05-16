@@ -80,7 +80,7 @@ const Posts = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:5001/api/community/user-posts",
+        "https://craftconnect-1-cb4x.onrender.com/api/community/user-posts",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -133,7 +133,7 @@ const Posts = () => {
         latitude: userLocation.latitude,
       };
 
-      await axios.post("http://localhost:5001/api/community/posts", postData, {
+      await axios.post("https://craftconnect-1-cb4x.onrender.com/api/community/posts", postData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -168,7 +168,7 @@ const Posts = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5001/api/community/accept-quotation",
+        "https://craftconnect-1-cb4x.onrender.com/api/community/accept-quotation",
         { replyId },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -202,7 +202,7 @@ const Posts = () => {
       }
 
       await axios.post(
-        "http://localhost:5001/api/community/complete-post",
+        "https://craftconnect-1-cb4x.onrender.com/api/community/complete-post",
         { postId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAuthToken } from "./AuthService";
 
-const API_URL = "https://craft-connect-kappa.vercel.app/api";
+const API_URL = "https://craftconnect-1-cb4x.onrender.com/api";
 
 // Get analytics summary for professional dashboard
 export const getProfessionalAnalyticsSummary = async () => {

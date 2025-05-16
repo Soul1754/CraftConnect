@@ -17,7 +17,7 @@ export default function CustomerSignup() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/auth/register-customer",
+        "https://craftconnect-1-cb4x.onrender.com/api/auth/register-customer",
         formData
       );
       if (res.status === 201) {

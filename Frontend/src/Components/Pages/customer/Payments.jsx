@@ -14,7 +14,7 @@ const Payments = () => {
             try {
                 setLoading(true);
                 const token = localStorage.getItem('token');
-                const response = await axios.get('http://localhost:5001/api/payments/history', {
+                const response = await axios.get('https://craftconnect-1-cb4x.onrender.com/api/payments/history', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

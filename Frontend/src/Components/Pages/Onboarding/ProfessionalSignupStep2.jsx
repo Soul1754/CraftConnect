@@ -40,7 +40,7 @@ export default function ProfessionalSignup() {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/auth/register-professional",
+        "https://craftconnect-1-cb4x.onrender.com/api/auth/register-professional",
         {
           name: formData.name,
           email: formData.email,
@@ -65,7 +65,7 @@ export default function ProfessionalSignup() {
     }
     setLoading(true);
     try {
-      const res = await axios.post("http://localhost:5001/api/auth/send-otp", {
+      const res = await axios.post("https://craftconnect-1-cb4x.onrender.com/api/auth/send-otp", {
         email: formData.email,
         phone: formData.phone,
       });
@@ -89,7 +89,7 @@ export default function ProfessionalSignup() {
     setLoading(true);
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/auth/verify-otp",
+        "https://craftconnect-1-cb4x.onrender.com/api/auth/verify-otp",
         {
           email: formData.email,
           otp: formData.otp,

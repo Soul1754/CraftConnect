@@ -110,7 +110,7 @@ const Community = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:5001/api/community/nearby-posts?${queryParams}`,
+        `https://craftconnect-1-cb4x.onrender.com/api/community/nearby-posts?${queryParams}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -150,7 +150,7 @@ const Community = () => {
       };
 
       await axios.post(
-        "http://localhost:5001/api/community/submit-quotation",
+        "https://craftconnect-1-cb4x.onrender.com/api/community/submit-quotation",
         quotationPayload,
         {
           headers: { Authorization: `Bearer ${token}` },

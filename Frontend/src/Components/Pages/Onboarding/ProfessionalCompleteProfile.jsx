@@ -72,7 +72,7 @@ export default function ProfessionalCompleteProfile() {
     const token = localStorage.getItem("token");
     try {
       await axios.post(
-        "http://localhost:5001/api/auth/complete-profile",
+        "https://craftconnect-1-cb4x.onrender.com/api/auth/complete-profile",
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },

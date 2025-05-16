@@ -29,7 +29,7 @@ const BookingForm = () => {
         }
 
         const response = await axios.get(
-          `http://localhost:5001/api/community/quotation/${replyId}`,
+          `https://craftconnect-1-cb4x.onrender.com/api/community/quotation/${replyId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -69,7 +69,7 @@ const BookingForm = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:5001/api/bookings/create",
+        "https://craftconnect-1-cb4x.onrender.com/api/bookings/create",
         {
           replyId,
           date: bookingData.date,
@@ -87,7 +87,7 @@ const BookingForm = () => {
       const amount = quotation.quotation.amount; // Assuming quotation object has amount
 
       const paymentOrderResponse = await axios.post(
-        "http://localhost:5001/api/payments/create-order",
+        "https://craftconnect-1-cb4x.onrender.com/api/payments/create-order",
         {
           bookingId,
           amount,
@@ -111,7 +111,7 @@ const BookingForm = () => {
           // Verify payment on backend
           try {
             await axios.post(
-              "http://localhost:5001/api/payments/verify",
+              "https://craftconnect-1-cb4x.onrender.com/api/payments/verify",
               {
                 bookingId,
                 razorpay_payment_id: paymentResponse.razorpay_payment_id,

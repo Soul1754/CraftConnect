@@ -17,7 +17,7 @@ export default function ProfessionalSignupStep1() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/auth/register-professional",
+        "https://craftconnect-1-cb4x.onrender.com/api/auth/register-professional",
         formData
       );
       if (res.data.message === "Proceed to phone verification") {

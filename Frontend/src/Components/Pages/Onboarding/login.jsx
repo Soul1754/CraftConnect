@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:5001/api/auth/login",
+        "https://craftconnect-1-cb4x.onrender.com/api/auth/login",
         formData
       );
       if (res.status === 200) {

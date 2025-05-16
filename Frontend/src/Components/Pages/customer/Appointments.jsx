@@ -238,7 +238,7 @@ const Appointments = () => {
               <tbody className="bg-white divide-y divide-gray-200">
                 {appointments.map((appointment) => (
                   <tr key={appointment._id || appointment.id}>
-                    {console.log(appointment)}
+                    {}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {appointment.name}
                     </td>
@@ -248,7 +248,7 @@ const Appointments = () => {
                           ? JSON.stringify(appointment.professional)
                           : appointment.professional)}
                     </td>
-                    {console.log(appointment)}
+                    {}
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                       {formatDate(appointment.date)}
                     </td>
