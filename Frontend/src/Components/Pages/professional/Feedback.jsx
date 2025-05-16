@@ -1,34 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ProfessionalLayout from '../../Layout/ProfessionalLayout';
+import { getAuthToken } from '../../../Services/AuthService';
 
 const Feedback = () => {
-  // Demo data for reviews
-  const reviews = [
-    {
-      id: 1,
-      customer: 'John Doe',
-      rating: 5,
-      comment: 'Excellent service! Very professional and efficient.',
-      date: '2024-02-14',
-      service: 'Plumbing Repair'
-    },
-    {
-      id: 2,
-      customer: 'Sarah Smith',
-      rating: 4,
-      comment: 'Good work, but arrived a bit late.',
-      date: '2024-02-13',
-      service: 'Emergency Plumbing'
-    },
-    {
-      id: 3,
-      customer: 'Mike Johnson',
-      rating: 5,
-      comment: 'Great attention to detail. Will definitely hire again!',
-      date: '2024-02-12',
-      service: 'Installation'
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [stats, setStats] = useState({
+    averageRating: 0,
+    totalReviews: 0,
+    ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  });
+
+  useEffect(() => {
+    fetchReviews();
+  }, []);
+
+  const fetchReviews = async () => {
+    try {
+      setLoading(true);
+      const token = getAuthToken();
+      if (!token) {
+        throw new Error('Authentication required');
+      }
+
+      const response = await axios.get('http://localhost:5001/api/reviews/professional', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      setReviews(response.data.reviews || []);
+      
+      // Calculate statistics
+      if (response.data.reviews && response.data.reviews.length > 0) {
+        const totalReviews = response.data.reviews.length;
+        const sumRatings = response.data.reviews.reduce((sum, review) => sum + review.rating, 0);
+        const averageRating = (sumRatings / totalReviews).toFixed(1);
+        
+        // Calculate rating distribution
+        const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+        response.data.reviews.forEach(review => {
+          distribution[review.rating] += 1;
+        });
+        
+        // Convert to percentages
+        const percentages = {};
+        Object.keys(distribution).forEach(rating => {
+          percentages[rating] = Math.round((distribution[rating] / totalReviews) * 100);
+        });
+        
+        setStats({
+          averageRating,
+          totalReviews,
+          ratingDistribution: percentages
+        });
+      }
+      
+      setLoading(false);
+    } catch (err) {
+      console.error('Error fetching reviews:', err);
+      setError(err.message || 'Failed to load reviews');
+      setLoading(false);
     }
-  ];
+  };
 
   const renderStars = (rating) => {
     return [...Array(5)].map((_, index) => (
@@ -43,6 +79,26 @@ const Feedback = () => {
     ));
   };
 
+  if (loading) {
+    return (
+      <ProfessionalLayout>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      </ProfessionalLayout>
+    );
+  }
+
+  if (error) {
+    return (
+      <ProfessionalLayout>
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <p>{error}</p>
+        </div>
+      </ProfessionalLayout>
+    );
+  }
+
   return (
     <ProfessionalLayout>
       <div className="space-y-6">
@@ -53,30 +109,36 @@ const Feedback = () => {
           <div className="flex items-center space-x-4">
             <div className="flex-1">
               <h2 className="text-xl font-semibold mb-2">Overall Rating</h2>
-              <div className="flex items-center">
-                <div className="flex">{renderStars(4)}</div>
-                <span className="ml-2 text-2xl font-bold text-gray-900">4.8</span>
-                <span className="ml-2 text-gray-600">(124 reviews)</span>
-              </div>
+              {reviews.length > 0 ? (
+                <div className="flex items-center">
+                  <div className="flex">{renderStars(Math.round(stats.averageRating))}</div>
+                  <span className="ml-2 text-2xl font-bold text-gray-900">{stats.averageRating}</span>
+                  <span className="ml-2 text-gray-600">({stats.totalReviews} reviews)</span>
+                </div>
+              ) : (
+                <p className="text-gray-500">No reviews yet</p>
+              )}
             </div>
-            <div className="flex-1">
-              <div className="space-y-2">
-                {[5, 4, 3, 2, 1].map((star) => (
-                  <div key={star} className="flex items-center">
-                    <span className="w-12 text-sm text-gray-600">{star} stars</span>
-                    <div className="flex-1 h-2 mx-2 bg-gray-200 rounded">
-                      <div
-                        className="h-2 bg-yellow-400 rounded"
-                        style={{ width: `${star === 5 ? 70 : star === 4 ? 20 : star === 3 ? 7 : star === 2 ? 2 : 1}%` }}
-                      ></div>
+            {reviews.length > 0 && (
+              <div className="flex-1">
+                <div className="space-y-2">
+                  {[5, 4, 3, 2, 1].map((star) => (
+                    <div key={star} className="flex items-center">
+                      <span className="w-12 text-sm text-gray-600">{star} stars</span>
+                      <div className="flex-1 h-2 mx-2 bg-gray-200 rounded">
+                        <div
+                          className="h-2 bg-yellow-400 rounded"
+                          style={{ width: `${stats.ratingDistribution[star] || 0}%` }}
+                        ></div>
+                      </div>
+                      <span className="w-12 text-sm text-gray-600">
+                        {stats.ratingDistribution[star] || 0}%
+                      </span>
                     </div>
-                    <span className="w-12 text-sm text-gray-600">
-                      {star === 5 ? '70%' : star === 4 ? '20%' : star === 3 ? '7%' : star === 2 ? '2%' : '1%'}
-                    </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -85,23 +147,31 @@ const Feedback = () => {
           <div className="p-6">
             <h2 className="text-xl font-semibold mb-4">Recent Reviews</h2>
           </div>
-          <div className="divide-y divide-gray-200">
-            {reviews.map((review) => (
-              <div key={review.id} className="p-6">
-                <div className="flex justify-between">
-                  <div>
-                    <h3 className="font-medium text-gray-900">{review.customer}</h3>
-                    <p className="text-sm text-gray-500">{review.service}</p>
+          {reviews.length > 0 ? (
+            <div className="divide-y divide-gray-200">
+              {reviews.map((review) => (
+                <div key={review._id || review.id} className="p-6">
+                  <div className="flex justify-between">
+                    <div>
+                      <h3 className="font-medium text-gray-900">{review.customerName}</h3>
+                      <p className="text-sm text-gray-500">{review.serviceName}</p>
+                    </div>
+                    <span className="text-sm text-gray-500">
+                      {new Date(review.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
-                  <span className="text-sm text-gray-500">{review.date}</span>
+                  <div className="mt-2">
+                    <div className="flex mb-1">{renderStars(review.rating)}</div>
+                    <p className="text-gray-600 mt-2">{review.comment}</p>
+                  </div>
                 </div>
-                <div className="mt-2">
-                  <div className="flex mb-1">{renderStars(review.rating)}</div>
-                  <p className="text-gray-600 mt-2">{review.comment}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="p-6 text-center text-gray-500">
+              No reviews available yet.
+            </div>
+          )}
         </div>
       </div>
     </ProfessionalLayout>

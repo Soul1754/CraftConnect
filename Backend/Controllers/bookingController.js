@@ -1,4 +1,4 @@
-const Booking = require("../Models/Booking");
+const Booking = require("../models/Booking");
 
 const CommunityReply = require("../Models/CommunityReply");
 const Post = require("../Models/Post");
@@ -190,7 +190,7 @@ exports.sendWorkCompletionOTP = async (req, res) => {
     // Find the booking
     const booking = await Booking.findById(bookingId).populate(
       "customer",
-      "phone"
+      "name email phone"
     );
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
@@ -226,12 +226,31 @@ exports.sendWorkCompletionOTP = async (req, res) => {
       process.env.TWILIO_ACCOUNT_SID,
       process.env.TWILIO_AUTH_TOKEN
     );
-
-    await client.messages.create({
-      body: `Your CraftConnect work completion verification code is: ${otp}`,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: booking.customer.phone,
-    });
+    
+    // Ensure phone number is in E.164 format (e.g., +1234567890)
+    let phoneNumber = booking.customer.phone;
+    if (!phoneNumber) {
+      return res.status(400).json({ message: "Customer phone number is missing" });
+    }
+    
+    // Format phone number if it doesn't start with '+'
+    if (!phoneNumber.startsWith('+')) {
+      phoneNumber = `+${phoneNumber}`;
+    }
+    
+    try {
+      await client.messages.create({
+        body: `Your CraftConnect work completion verification code is: ${otp}`,
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: phoneNumber,
+      });
+    } catch (twilioError) {
+      console.error("Twilio error:", twilioError);
+      return res.status(500).json({ 
+        message: "Failed to send OTP", 
+        error: twilioError.message || "Twilio service error" 
+      });
+    }
 
     res.json({ message: "OTP sent to customer for verification" });
   } catch (error) {
@@ -329,10 +348,11 @@ exports.submitReview = async (req, res) => {
     }
 
     // Create the review
-    const Review = require("../Models/Review");
+    const Review = require("../models/Review");
     const newReview = new Review({
       customer: customerId,
       professional: booking.professional,
+      booking: bookingId,  // Add reference to the booking
       rating,
       comment: comment || "",
     });

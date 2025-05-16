@@ -112,6 +112,11 @@ export const sendWorkCompletionOTP = async (bookingId) => {
     return response.data;
   } catch (error) {
     console.error("Error sending completion OTP:", error);
+    // Extract more detailed error information from the response if available
+    if (error.response && error.response.data) {
+      const errorMessage = error.response.data.message || error.response.data.error || "Unknown server error";
+      throw new Error(errorMessage);
+    }
     throw error;
   }
 };

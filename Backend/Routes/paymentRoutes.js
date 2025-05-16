@@ -7,11 +7,13 @@ const {
   createProfessionalContact,
   createFundAccount,
   initiatePayout,
+  getCustomerPaymentHistory,
 } = require("../Controllers/paymentController");
 
 // Customer payment routes
 router.post("/create-order", protect, createOrder);
 router.post("/verify", protect, verifyPayment);
+router.get("/history", protect, getCustomerPaymentHistory);
 
 // Professional payout routes
 router.post("/create-contact", protect, createProfessionalContact);

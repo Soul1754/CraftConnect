@@ -1,6 +1,6 @@
 const Post = require("../Models/Post");
 const CommunityReply = require("../Models/CommunityReply");
-const User = require("../Models/User");
+const User = require("../models/User");
 
 // Create a new community post
 exports.createPost = async (req, res) => {
@@ -185,9 +185,34 @@ exports.getUserPosts = async (req, res) => {
           "name profilePicture role"
         );
 
+        // Get ratings for each professional
+        const repliesWithRatings = await Promise.all(
+          replies.map(async (reply) => {
+            const professionalId = reply.user._id;
+            
+            // Find all reviews for this professional
+            const Review = require("../models/Review");
+            const reviews = await Review.find({ professional: professionalId });
+            
+            // Calculate average rating and total reviews
+            const totalReviews = reviews.length;
+            const averageRating = totalReviews > 0 
+              ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
+              : 0;
+            
+            return {
+              ...reply._doc,
+              professionalRating: {
+                average: averageRating,
+                total: totalReviews
+              }
+            };
+          })
+        );
+
         return {
           ...post._doc,
-          replies,
+          replies: repliesWithRatings,
         };
       })
     );
@@ -274,9 +299,29 @@ exports.getQuotationById = async (req, res) => {
         .json({ message: "Not authorized to view this quotation" });
     }
 
-    // Return the quotation details
+    // Get professional rating information
+    const professionalId = reply.user._id;
+    const Review = require("../models/Review");
+    const reviews = await Review.find({ professional: professionalId });
+    
+    // Calculate average rating and total reviews
+    const totalReviews = reviews.length;
+    const averageRating = totalReviews > 0 
+      ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
+      : 0;
+    
+    // Add rating information to the reply
+    const replyWithRating = {
+      ...reply._doc,
+      professionalRating: {
+        average: averageRating,
+        total: totalReviews
+      }
+    };
+
+    // Return the quotation details with rating information
     res.json({
-      reply,
+      reply: replyWithRating,
       post,
     });
   } catch (error) {

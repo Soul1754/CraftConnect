@@ -13,6 +13,8 @@ const Community = () => {
   const [showQuotationForm, setShowQuotationForm] = useState(false);
   const [tagFilter, setTagFilter] = useState("");
   const [maxDistance, setMaxDistance] = useState(10000); // 10km default
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredPosts, setFilteredPosts] = useState([]);
 
   // Quotation form state
   const [quotationData, setQuotationData] = useState({
@@ -46,6 +48,25 @@ const Community = () => {
       fetchNearbyPosts();
     }
   }, [locationPermission, userLocation, tagFilter, maxDistance]);
+
+  // Filter posts based on search query
+  useEffect(() => {
+    if (posts.length > 0) {
+      if (searchQuery.trim() === "") {
+        setFilteredPosts(posts);
+      } else {
+        const filtered = posts.filter(
+          (post) =>
+            post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            post.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
+        );
+        setFilteredPosts(filtered);
+      }
+    } else {
+      setFilteredPosts([]);
+    }
+  }, [posts, searchQuery]);
 
   // Request location permission
   const requestLocationPermission = () => {
@@ -96,6 +117,7 @@ const Community = () => {
       );
 
       setPosts(response.data);
+      setFilteredPosts(response.data);
       setLoading(false);
     } catch (err) {
       console.error("Error fetching nearby posts:", err);
@@ -198,6 +220,32 @@ const Community = () => {
         {/* Filters */}
         {locationPermission && (
           <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="mb-4 relative">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search service requests..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full p-3 pl-10 pr-4 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                />
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </div>
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
             <div className="flex flex-wrap gap-4 items-center">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">
@@ -388,14 +436,18 @@ const Community = () => {
           <div className="text-center py-4 text-gray-500">
             Please grant location permission to view nearby service requests.
           </div>
-        ) : posts.length === 0 ? (
+        ) : filteredPosts.length === 0 && searchQuery ? (
+          <div className="text-center py-4 text-gray-500">
+            No service requests found matching your search. Try different keywords.
+          </div>
+        ) : filteredPosts.length === 0 ? (
           <div className="text-center py-4 text-gray-500">
             No service requests found in your area. Try increasing the distance
             or changing filters.
           </div>
         ) : (
           <div className="space-y-4">
-            {posts.map((post) => (
+            {filteredPosts.map((post) => (
               <div
                 key={post._id}
                 className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow"

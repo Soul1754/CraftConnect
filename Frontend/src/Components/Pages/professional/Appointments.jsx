@@ -42,11 +42,20 @@ const ProfessionalAppointments = () => {
     try {
       setSelectedBooking(booking);
       setProcessingAction(true);
+      
+      // Check if customer has a phone number
+      if (!booking.customer.phone) {
+        alert("Customer does not have a phone number registered. OTP cannot be sent.");
+        setProcessingAction(false);
+        return;
+      }
+      
       await sendWorkCompletionOTP(booking._id);
       setShowOtpModal(true);
       setProcessingAction(false);
     } catch (err) {
-      alert(err.message || "Failed to send OTP");
+      console.error("Error in handleSendOTP:", err);
+      alert(err.message || "Failed to send OTP. Please check console for details.");
       setProcessingAction(false);
     }
   };

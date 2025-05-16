@@ -6,6 +6,8 @@ const authRoutes = require("./Routes/authRoutes");
 const communityRoutes = require("./Routes/communityRoutes");
 const bookingRoutes = require("./Routes/bookingRoutes");
 const paymentRoutes = require("./Routes/paymentRoutes");
+const reviewRoutes = require("./Routes/reviewRoutes");
+const analyticsRoutes = require("./Routes/analyticsRoutes");
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/community", communityRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

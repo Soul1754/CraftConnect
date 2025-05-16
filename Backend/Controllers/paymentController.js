@@ -1,5 +1,6 @@
-const Booking = require("../Models/Booking");
-const User = require("../Models/User");
+const Booking = require("../models/Booking");
+const User = require("../models/User");
+const Payment = require("../models/Payment");
 const crypto = require("crypto");
 
 // Initialize Razorpay
@@ -94,6 +95,17 @@ exports.verifyPayment = async (req, res) => {
     booking.paymentStatus = "paid";
     booking.transactionId = razorpay_payment_id;
     await booking.save();
+    
+    // Create payment record for history tracking
+    await Payment.create({
+      booking: booking._id,
+      customer: booking.customer,
+      professional: booking.professional,
+      amount: booking.price,
+      transactionId: razorpay_payment_id,
+      orderId: razorpay_order_id,
+      status: "completed"
+    });
 
     res.json({ message: "Payment verified successfully", booking });
   } catch (error) {
@@ -198,6 +210,17 @@ exports.initiatePayout = async (req, res) => {
 
     // Update booking with payout details
     booking.payoutStatus = "released";
+    
+    // Create a payment record for tracking
+    await Payment.create({
+      booking: booking._id,
+      customer: booking.customer,
+      professional: booking.professional,
+      amount: payoutAmount,
+      transactionId: payout.id,
+      orderId: booking.paymentId,
+      status: "completed"
+    });
     booking.payoutId = payout.id;
     await booking.save();
 
@@ -209,5 +232,40 @@ exports.initiatePayout = async (req, res) => {
   } catch (error) {
     console.error("Error initiating payout:", error);
     res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Get payment history for a customer
+exports.getCustomerPaymentHistory = async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    // Find all payments for this customer
+    const payments = await Payment.find({ customer: userId })
+      .populate({
+        path: 'booking',
+        select: 'name description'
+      })
+      .populate({
+        path: 'professional',
+        select: 'name'
+      })
+      .sort({ createdAt: -1 });
+
+    // Format the response
+    const formattedPayments = payments.map(payment => ({
+      id: payment._id,
+      service: payment.booking ? payment.booking.name : 'Service',
+      amount: payment.amount,
+      date: payment.createdAt.toISOString().split('T')[0],
+      status: payment.status.charAt(0).toUpperCase() + payment.status.slice(1),
+      professional: payment.professional ? payment.professional.name : 'Professional',
+      transactionId: payment.transactionId
+    }));
+
+    res.json(formattedPayments);
+  } catch (error) {
+    console.error('Error fetching payment history:', error);
+    res.status(500).json({ message: 'Server error' });
   }
 };
