@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getAuthToken } from "./AuthService";
 
-const API_URL = "http://localhost:5001/api/bookings";
+const API_URL = "https://craftconnect-1-cb4x.onrender.com/api/bookings";
 
 // Get user bookings (for customer or professional)
 export const getUserBookings = async (userType) => {
