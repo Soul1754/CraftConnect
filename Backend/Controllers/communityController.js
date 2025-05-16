@@ -1,5 +1,5 @@
-const Post = require("../Models/Post");
-const CommunityReply = require("../Models/CommunityReply");
+const Post = require("../models/Post");
+const CommunityReply = require("../models/CommunityReply");
 const User = require("../models/User");
 
 // Create a new community post

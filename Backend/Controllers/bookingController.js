@@ -1,7 +1,7 @@
 const Booking = require("../models/Booking");
 
-const CommunityReply = require("../Models/CommunityReply");
-const Post = require("../Models/Post");
+const CommunityReply = require("../models/CommunityReply");
+// const Post = require("../models/Post");
 
 // Create a new booking from an accepted quotation
 exports.createBooking = async (req, res) => {

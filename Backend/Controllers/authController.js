@@ -1,8 +1,9 @@
 // authController.js
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../Models/User");
-const Service = require("../Models/Service");
+// const User = require("../Models/User");]
+const User = require('../models/User')
+const Service = require("../models/Service");
 const dotenv = require("dotenv");
 const twilio = require("twilio");
 
