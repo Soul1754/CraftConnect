@@ -502,7 +502,7 @@ const Posts = () => {
                                     Quotation Details:
                                   </p>
                                   <p className="font-bold text-green-600">
-                                    ${reply.quotation.amount}
+                                  ₹{reply.quotation.amount}
                                   </p>
                                 </div>
                                 <p className="text-sm text-gray-600">

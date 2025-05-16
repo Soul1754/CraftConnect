@@ -19,7 +19,7 @@ const ProfessionalDashboard = () => {
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="text-sm font-medium text-gray-500">Total Earnings</h3>
-                        <p className="mt-2 text-2xl font-semibold text-gray-900">$1,240</p>
+                        <p className="mt-2 text-2xl font-semibold text-gray-900">₹1,240</p>
                     </div>
                     <div className="bg-white p-6 rounded-lg shadow-sm">
                         <h3 className="text-sm font-medium text-gray-500">Rating</h3>
@@ -50,4 +50,4 @@ const ProfessionalDashboard = () => {
     );
 };
 
-export default ProfessionalDashboard;
+export default ProfessionalDashboard;

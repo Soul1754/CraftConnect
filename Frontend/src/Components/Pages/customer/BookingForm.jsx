@@ -281,7 +281,7 @@ const BookingForm = () => {
                         Quotation Details:
                       </p>
                       <p className="font-bold text-green-600">
-                        ${quotation.quotation.amount}
+                      ₹{quotation.quotation.amount}
                       </p>
                     </div>
                     <p className="text-sm text-gray-600">

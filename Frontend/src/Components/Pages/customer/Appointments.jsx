@@ -359,7 +359,7 @@ const Appointments = () => {
                   selectedBooking.professional}
               </p>
               <p>
-                <span className="font-semibold">Amount:</span> $
+                <span className="font-semibold">Amount:</span> ₹
                 {selectedBooking.price || "100"}
               </p>
             </div>

@@ -183,7 +183,7 @@ export default function ProfessionalCompleteProfile() {
                     <div>
                       <p className="font-semibold text-gray-100">{s.name}</p>
                       <p className="text-sm text-gray-400">
-                        {s.type} - ${s.rate}
+                        {s.type} - ₹{s.rate}
                       </p>
                       <p className="text-sm text-gray-400">{s.description}</p>
                     </div>
