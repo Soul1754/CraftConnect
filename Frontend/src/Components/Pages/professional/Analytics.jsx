@@ -141,13 +141,13 @@ const Analytics = () => {
               <div className="flex space-x-3">
                 <button 
                   onClick={() => handleBookingPeriodChange('weekly')} 
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${bookingPeriod === 'weekly' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${bookingPeriod === 'weekly' ? 'bg-black hover:bg-gray-800 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
                 >
                   Weekly
                 </button>
                 <button 
                   onClick={() => handleBookingPeriodChange('monthly')} 
-                  className={`px-3 py-1 text-sm rounded-md ${bookingPeriod === 'monthly' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+                  className={`px-3 py-1 text-sm rounded-md ${bookingPeriod === 'monthly' ? 'bg-black text-white' : 'bg-gray-200 text-gray-700'}`}
                 >
                   Monthly
                 </button>
@@ -161,7 +161,7 @@ const Analytics = () => {
                     <div className="relative flex flex-col items-center">
                       <span className="absolute -top-7 text-sm font-semibold text-gray-700">{item.count}</span>
                       <div 
-                        className="bg-blue-500 w-12 rounded-t-md hover:bg-blue-600 transition-colors duration-300" 
+                        className="bg-black w-12 rounded-t-md hover:bg-gray-800 transition-colors duration-300" 
                         style={{ height: `${(item.count / Math.max(...analyticsData.recentBookings.map(b => b.count)) || 1) * 180}px` }}
                       ></div>
                     </div>
@@ -191,13 +191,13 @@ const Analytics = () => {
               <div className="flex space-x-2">
                 <button 
                   onClick={() => handleRevenuePeriodChange('weekly')} 
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${revenuePeriod === 'weekly' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${revenuePeriod === 'weekly' ? 'bg-black hover:bg-gray-800 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
                 >
                   Weekly
                 </button>
                 <button 
                   onClick={() => handleRevenuePeriodChange('monthly')} 
-                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${revenuePeriod === 'monthly' ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${revenuePeriod === 'monthly' ? 'bg-black hover:bg-gray-800 text-white' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
                 >
                   Monthly
                 </button>
@@ -211,7 +211,7 @@ const Analytics = () => {
                     <div className="relative flex flex-col items-center">
                       <span className="absolute -top-7 text-sm font-semibold text-gray-700">Rs {item.amount}</span>
                       <div 
-                        className="bg-green-500 hover:bg-green-600 transition-colors duration-300 w-12 rounded-t-md shadow-sm" 
+                        className="bg-black hover:bg-gray-800 transition-colors duration-300 w-12 rounded-t-md shadow-sm" 
                         style={{ height: `${(item.amount / Math.max(...analyticsData.revenueData.map(r => r.amount)) || 1) * 180}px` }}
                       ></div>
                     </div>
@@ -243,7 +243,7 @@ const Analytics = () => {
             {analyticsData?.recentActivity && analyticsData.recentActivity.length > 0 ? (
               analyticsData.recentActivity.map((activity, index) => {
                 // Determine icon and color based on activity type
-                let iconColor = "bg-blue-500";
+                let iconColor = "bg-black";
                 if (activity.type === 'review') {
                   iconColor = "bg-yellow-500";
                 } else if (activity.type === 'payment') {

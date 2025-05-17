@@ -226,7 +226,7 @@ const BookingForm = () => {
                 {post.tags.map((tag, index) => (
                   <span
                     key={index}
-                    className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded"
+                    className="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded"
                   >
                     {tag}
                   </span>
@@ -363,7 +363,7 @@ const BookingForm = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800"
                 >
                   Create Booking
                 </button>

@@ -120,7 +120,7 @@ const Payments = () => {
                         <span className="font-semibold">Total Spent:</span>₹{payments.reduce((total, payment) => total + payment.amount, 0).toFixed(2)}
                     </div>
                     <button 
-                        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                        className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"
                         onClick={() => alert('Statement download functionality will be implemented in future updates.')}
                     >
                         Download Statement

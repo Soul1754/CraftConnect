@@ -31,15 +31,15 @@ const ProfessionalDashboard = () => {
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                     <h2 className="text-xl font-semibold mb-4">Quick Actions</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <button className="p-4 text-left border rounded-lg hover:bg-blue-50 transition-colors">
+                        <button className="p-4 text-left border rounded-lg hover:bg-gray-100 transition-colors">
                             <h3 className="font-medium text-blue-600">Manage Services</h3>
                             <p className="text-sm text-gray-600 mt-1">Update your service offerings</p>
                         </button>
-                        <button className="p-4 text-left border rounded-lg hover:bg-blue-50 transition-colors">
+                        <button className="p-4 text-left border rounded-lg hover:bg-gray-100 transition-colors">
                             <h3 className="font-medium text-blue-600">View Schedule</h3>
                             <p className="text-sm text-gray-600 mt-1">Check your appointments</p>
                         </button>
-                        <button className="p-4 text-left border rounded-lg hover:bg-blue-50 transition-colors">
+                        <button className="p-4 text-left border rounded-lg hover:bg-gray-100 transition-colors">
                             <h3 className="font-medium text-blue-600">Update Profile</h3>
                             <p className="text-sm text-gray-600 mt-1">Manage your information</p>
                         </button>

@@ -85,7 +85,7 @@ const ReviewForm = () => {
         </div>
         <button
           onClick={() => navigate("/customer/appointments")}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
         >
           Back to Appointments
         </button>
@@ -163,14 +163,14 @@ const ReviewForm = () => {
             <button
               type="button"
               onClick={() => navigate("/customer/appointments")}
-              className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded"
+              className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
             >
               {loading ? "Submitting..." : "Submit Review"}
             </button>

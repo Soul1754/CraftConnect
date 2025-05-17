@@ -204,7 +204,7 @@ const ProfessionalAppointments = () => {
                           <button
                             onClick={() => handleSendOTP(booking)}
                             disabled={processingAction}
-                            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-xs"
+                            className="bg-black hover:bg-gray-800 text-white px-3 py-1 rounded text-xs"
                           >
                             Mark Complete
                           </button>
@@ -258,7 +258,7 @@ const ProfessionalAppointments = () => {
               <button
                 onClick={handleVerifyOTP}
                 disabled={processingAction}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
               >
                 {processingAction ? "Processing..." : "Verify"}
               </button>
@@ -294,7 +294,7 @@ const ProfessionalAppointments = () => {
               <button
                 onClick={handleInitiatePayout}
                 disabled={processingAction}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
               >
                 {processingAction ? "Processing..." : "Process Payment"}
               </button>

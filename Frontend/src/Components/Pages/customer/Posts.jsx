@@ -249,7 +249,7 @@ const Posts = () => {
             </button>
           ) : (
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"
               onClick={() => setShowCreateForm(!showCreateForm)}
             >
               {showCreateForm ? "Cancel" : "Create New Request"}
@@ -343,7 +343,7 @@ const Posts = () => {
               <div className="flex items-center justify-end">
                 <button
                   type="submit"
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
                   Submit Request
                 </button>
@@ -525,7 +525,7 @@ const Posts = () => {
                                   onClick={() =>
                                     handleAcceptQuotation(reply._id)
                                   }
-                                  className="bg-green-500 text-white px-3 py-1 rounded-lg hover:bg-green-600 text-sm"
+                                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 mr-2"
                                 >
                                   Accept Quotation
                                 </button>
@@ -546,7 +546,7 @@ const Posts = () => {
                   {post.status === "in-progress" && (
                     <button
                       onClick={() => handleMarkCompleted(post._id)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 mr-2"
+                      className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 mr-2"
                     >
                       Mark as Completed
                     </button>

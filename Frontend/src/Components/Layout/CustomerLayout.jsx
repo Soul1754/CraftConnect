@@ -13,7 +13,7 @@ export default function CustomerLayout({ children }) {
   };
 
   const isActive = (path) => {
-    return location.pathname === path ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-500' : '';
+    return location.pathname === path ? 'bg-gray-100 text-black border-l-4 border-black' : '';
   };
 
   const toggleMobileMenu = () => {
@@ -28,10 +28,10 @@ export default function CustomerLayout({ children }) {
   ];
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
+    <div className="flex flex-col md:flex-row min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Mobile Header */}
       <div className="md:hidden bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-10">
-        <h2 className="text-xl font-bold text-gray-800 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">CraftConnect</h2>
+        <h2 className="text-xl font-bold text-gray-900">CraftConnect</h2>
         <button 
           onClick={toggleMobileMenu}
           className="text-gray-700 focus:outline-none"
@@ -80,7 +80,7 @@ export default function CustomerLayout({ children }) {
       {/* Desktop Sidebar */}
       <div className="hidden md:block w-64 bg-white shadow-lg">
         <div className="p-4">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">CraftConnect</h2>
+          <h2 className="text-2xl font-bold text-gray-900">CraftConnect</h2>
         </div>
         <nav className="mt-4">
           {navLinks.map((link) => (
@@ -126,7 +126,7 @@ export default function CustomerLayout({ children }) {
                 <option value="east">East</option>
                 <option value="west">West</option>
               </select>
-              <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all duration-300">
+              <button className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all duration-300">
                 Search
               </button>
             </div>
@@ -142,7 +142,7 @@ export default function CustomerLayout({ children }) {
             <Link
               key={link.path}
               to={link.path}
-              className={`flex flex-col items-center px-2 py-1 text-xs ${location.pathname === link.path ? 'text-blue-600' : 'text-gray-600'}`}
+              className={`flex flex-col items-center px-2 py-1 text-xs ${location.pathname === link.path ? 'text-black' : 'text-gray-600'}`}
             >
               <svg className="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 {link.icon === 'calendar' && <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />}

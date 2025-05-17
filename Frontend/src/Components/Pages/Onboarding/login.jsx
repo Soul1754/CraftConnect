@@ -66,7 +66,7 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            className="w-full py-3 px-4 bg-blue-600 text-white font-medium rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transform transition duration-200 hover:scale-[1.02]"
+            className="w-full py-3 px-4 bg-black text-white font-medium rounded-lg shadow-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transform transition duration-200 hover:scale-[1.02]"
           >
             Sign In
           </button>

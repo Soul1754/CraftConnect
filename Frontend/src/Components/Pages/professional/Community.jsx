@@ -282,7 +282,7 @@ const Community = () => {
               </div>
 
               <button
-                className="mt-5 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                className="mt-5 bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"
                 onClick={fetchNearbyPosts}
               >
                 Refresh
@@ -347,7 +347,7 @@ const Community = () => {
               className={`w-full py-2 rounded-lg ${
                 showQuotationForm
                   ? "bg-gray-300 text-gray-700"
-                  : "bg-blue-500 text-white hover:bg-blue-600"
+                  : "bg-black text-white hover:bg-gray-800"
               }`}
               onClick={() => setShowQuotationForm(!showQuotationForm)}
             >
@@ -493,7 +493,7 @@ const Community = () => {
 
                 <button
                   onClick={() => setSelectedPost(post)}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800"
                 >
                   View Details
                 </button>

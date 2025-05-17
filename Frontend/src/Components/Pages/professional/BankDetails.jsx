@@ -200,7 +200,7 @@ const BankDetails = () => {
             <button
               type="submit"
               disabled={loading}
-              className={`px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 ${
+              className={`px-4 py-2 bg-black text-white rounded-md hover:bg-gray-800 ${
                 loading ? "opacity-50 cursor-not-allowed" : ""
               }`}
             >

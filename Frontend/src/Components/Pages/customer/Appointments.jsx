@@ -143,7 +143,7 @@ const Appointments = () => {
       case "pending":
         return "bg-yellow-100 text-yellow-800";
       case "confirmed":
-        return "bg-blue-100 text-blue-800";
+        return "bg-gray-100 text-gray-800";
       case "completed":
         return "bg-green-100 text-green-800";
       case "cancelled":
@@ -171,7 +171,7 @@ const Appointments = () => {
     return (
       <CustomerLayout>
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-black"></div>
         </div>
       </CustomerLayout>
     );
@@ -286,7 +286,7 @@ const Appointments = () => {
                       {appointment.paymentStatus === "unpaid" && (
                         <button
                           onClick={() => handleInitiatePayment(appointment)}
-                          className="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded-md text-sm"
+                          className="text-white bg-black hover:bg-gray-800 px-3 py-1 rounded-md text-sm"
                         >
                           Pay Now
                         </button>
@@ -298,7 +298,7 @@ const Appointments = () => {
                               setSelectedBooking(appointment);
                               setShowOtpModal(true);
                             }}
-                            className="text-white bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-sm"
+                            className="text-white bg-black hover:bg-gray-800 px-3 py-1 rounded-md text-sm"
                           >
                             Verify Work
                           </button>
@@ -316,7 +316,7 @@ const Appointments = () => {
                           onClick={() =>
                             navigate(`/customer/review/${appointment._id}`)
                           }
-                          className="text-white bg-green-500 hover:bg-green-600 px-3 py-1 rounded-md text-sm"
+                          className="text-white bg-black hover:bg-gray-800 px-3 py-1 rounded-md text-sm"
                           >
                             Review
                           </button>
@@ -373,7 +373,7 @@ const Appointments = () => {
               </button>
               <button
                 onClick={handlePayment}
-                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
                 disabled={paymentProcessing}
               >
                 {paymentProcessing ? "Processing..." : "Pay Now"}
